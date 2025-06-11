@@ -78,14 +78,18 @@ const Navbar = () => {
       </nav>
 
       {/* Back button fixed at bottom-right */}
-      <button
-        onClick={handleBack}
-        className="fixed bottom-24 right-6 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg flex items-center justify-center z-50"
-        aria-label="Go back"
-        title="Go back"
-      >
-        <ArrowLeft size={24} />
-      </button>
+     {/* Back button (hide on home page) */}
+{location.pathname !== '/' && (
+  <button
+    onClick={handleBack}
+    className="fixed bottom-24 right-6 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg flex items-center justify-center z-50"
+    aria-label="Go back"
+    title="Go back"
+  >
+    <ArrowLeft size={24} />
+  </button>
+)}
+
     </>
   );
 };

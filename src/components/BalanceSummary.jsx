@@ -36,7 +36,7 @@ export default function BalanceSummary() {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-blue-500 text-white p-6 shadow rounded-xl flex flex-col items-center transition-transform duration-300 ease-in-out hover:scale-105 md:hover:scale-110 lg:hover:scale-110">
+        <div className="bg-green-500 text-white p-6 shadow rounded-xl flex flex-col items-center transition-transform duration-300 ease-in-out hover:scale-105 md:hover:scale-110 lg:hover:scale-110">
           <FaArrowDown size={32} className="mb-2" />
           <h6 className="text-base mb-1">Received</h6>
           <p className="text-xl font-semibold">₹{balanceSummary.totalReceivedFromUsers}</p>
@@ -49,7 +49,7 @@ export default function BalanceSummary() {
         </div>
       </div>
 
-      <div className="bg-green-500 text-white p-6 shadow rounded-xl flex flex-col items-center transition-transform duration-300 ease-in-out hover:scale-105 md:hover:scale-110 lg:hover:scale-110">
+      <div className="bg-blue-500 text-white p-6 shadow rounded-xl flex flex-col items-center transition-transform duration-300 ease-in-out hover:scale-105 md:hover:scale-110 lg:hover:scale-110">
         <FaMoneyBillWave size={36} className="mb-3" />
         <h6 className="text-base mb-2">Total Added Amount</h6>
         <p className="text-2xl font-bold">₹{balanceSummary.totalAdded}</p>

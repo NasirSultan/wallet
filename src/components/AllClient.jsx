@@ -116,7 +116,7 @@ export default function AllClients() {
                 <div className="mt-4 flex flex-row gap-2">
                   <button
                     onClick={() => handleViewClient(client._id, client.name)}
-                    className="w-1/2 flex items-center justify-center bg-blue-600 text-white text-sm px-3 py-1.5 rounded-2xl hover:bg-blue-700 transition"
+                    className="w-1/2 flex items-center justify-center bg-green-800 text-white text-sm px-3 py-1.5 rounded-2xl hover:bg-green-900 transition"
                   >
                     <svg
                       className="w-5 h-5 mr-2"
@@ -136,7 +136,7 @@ export default function AllClients() {
 
                   <button
                     onClick={() => handleReceiveAmount(client._id, client.name)}
-                    className="w-1/2 flex items-center justify-center bg-green-600 text-white text-sm px-3 py-1.5 rounded-2xl hover:bg-green-700 transition"
+                    className="w-1/2 flex items-center justify-center bg-red-800 text-white text-sm px-3 py-1.5 rounded-2xl hover:bg-red-900 transition"
                   >
                     <svg
                       className="w-5 h-5 mr-2"
@@ -162,7 +162,7 @@ export default function AllClients() {
       {/* Floating Add Client Button */}
       <button
         onClick={() => navigate('/addclient')}
-        className="fixed bottom-42 right-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg transition-all duration-300 z-50"
+        className="fixed bottom-42 right-6 bg-green-700 hover:bg-green-800 text-white rounded-full p-4 shadow-lg transition-all duration-300 z-50"
         aria-label="Add Client"
       >
         <svg

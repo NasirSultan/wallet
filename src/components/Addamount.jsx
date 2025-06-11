@@ -86,7 +86,7 @@ export default function AddAmount() {
           <p
             className={`text-center text-sm sm:text-base md:text-lg ${
               message.toLowerCase().includes('success') ? 'text-green-400 font-semibold' : 'text-red-400'
-            }`}
+            }`}d
           >
             {message}
           </p>
@@ -95,7 +95,7 @@ export default function AddAmount() {
 
       {latestAdded !== null && (
         <div className="mx-auto mt-6 text-center">
-          <p className="inline-block bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-full px-6 py-3 shadow-lg text-sm sm:text-base md:text-lg">
+          <p className="inline-block bg-gradient-to-r from-red-800 to-red-800 text-white font-semibold rounded-full px-6 py-3 shadow-lg text-sm sm:text-base md:text-lg">
             Latest added amount: ₹{latestAdded}
           </p>
         </div>
