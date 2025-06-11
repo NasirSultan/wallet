@@ -81,18 +81,24 @@ export default function TransactionHistory() {
           onChange={(e) => setSearchName(e.target.value)}
           className="w-full px-4 py-2 rounded bg-zinc-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
         />
-        <input
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-          className="w-full px-4 py-2 rounded bg-zinc-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-        />
-        <input
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-          className="w-full px-4 py-2 rounded bg-zinc-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-        />
+    <input
+  type="date"
+  value={startDate}
+  onChange={(e) => setStartDate(e.target.value)}
+  className={`w-full sm:w-full px-4 py-2 rounded bg-zinc-800 ${
+    !startDate ? 'text-gray-400' : 'text-white'
+  } border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-500`}
+/>
+
+<input
+  type="date"
+  value={endDate}
+  onChange={(e) => setEndDate(e.target.value)}
+  className={`w-full sm:w-full px-4 py-2 rounded bg-zinc-800 ${
+    !endDate ? 'text-gray-400' : 'text-white'
+  } border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-500`}
+/>
+
         <button
           onClick={() => {
             setSearchName('');
