@@ -9,6 +9,7 @@ import {
   List,
   User,
   ArrowLeft,
+  Phone,
 } from 'lucide-react';
 
 const Navbar = () => {
@@ -21,58 +22,56 @@ const Navbar = () => {
     navigate(-1);
   };
 
+  const navLinkClass = (path) =>
+    `flex items-center space-x-1 ${
+      isActive(path) ? 'text-yellow-300 font-semibold' : 'hover:text-gray-300'
+    }`;
+
   return (
     <>
       {/* Top Navbar - visible on md and larger */}
       <nav className="hidden md:flex fixed top-0 left-0 w-full bg-blue-600 text-white py-4 px-6 shadow z-50 justify-between items-center">
         <div className="font-bold text-xl">My App</div>
-        <div className="flex space-x-6">
-          <Link to="/" className={isActive('/') ? 'text-yellow-300' : 'hover:text-gray-300'}>
-            Summary
+        <div className="flex space-x-6 text-sm">
+          <Link to="/" className={navLinkClass('/')}>
+            <Home size={18} />
+            <span>Home</span>
           </Link>
-          <Link
-            to="/addamount"
-            className={isActive('/addamount') ? 'text-yellow-300' : 'hover:text-gray-300'}
-          >
-            Add Amount
+          <Link to="/addamount" className={navLinkClass('/addamount')}>
+            <PlusCircle size={18} />
+            <span>Add Amount</span>
           </Link>
-          <Link
-            to="/addclient"
-            className={isActive('/addclient') ? 'text-yellow-300' : 'hover:text-gray-300'}
-          >
-            Add Client
+          <Link to="/allclients" className={navLinkClass('/allclients')}>
+            <Users size={18} />
+            <span>Clients</span>
           </Link>
-          <Link
-            to="/allclients"
-            className={isActive('/allclients') ? 'text-yellow-300' : 'hover:text-gray-300'}
-          >
-            All Clients
+          <Link to="/totaltransactions" className={navLinkClass('/totaltransactions')}>
+            <List size={18} />
+            <span>Transactions</span>
           </Link>
-          <Link to="/contact" className={isActive('/contact') ? 'text-yellow-300' : 'hover:text-gray-300'}>
-            Contact
+          <Link to="/contact" className={navLinkClass('/contact')}>
+            <Phone size={18} />
+            <span>Contact</span>
           </Link>
         </div>
       </nav>
 
       {/* Bottom Navbar - visible on small screens */}
       <nav className="fixed md:hidden bottom-0 left-0 w-full bg-blue-600 text-white py-2 px-6 shadow z-50 flex justify-around items-center">
-        <Link to="/" className="flex flex-col items-center">
+        <Link to="/" className={`flex flex-col items-center ${isActive('/') ? 'text-yellow-300' : ''}`}>
           <Home size={20} />
-          <span className="text-xs">Summary</span>
+          <span className="text-xs">Home</span>
         </Link>
-        <Link to="/addamount" className="flex flex-col items-center">
+        <Link to="/addamount" className={`flex flex-col items-center ${isActive('/addamount') ? 'text-yellow-300' : ''}`}>
           <PlusCircle size={20} />
           <span className="text-xs">Add</span>
         </Link>
-        <Link to="/allclients" className="flex flex-col items-center">
+        <Link to="/allclients" className={`flex flex-col items-center ${isActive('/allclients') ? 'text-yellow-300' : ''}`}>
           <Users size={20} />
           <span className="text-xs">Clients</span>
         </Link>
-        <Link to="/sendclientamount" className="flex flex-col items-center">
-          <Send size={20} />
-          <span className="text-xs">Send</span>
-        </Link>
-        <Link to="/totaltransactions" className="flex flex-col items-center">
+       
+        <Link to="/totaltransactions" className={`flex flex-col items-center ${isActive('/totaltransactions') ? 'text-yellow-300' : ''}`}>
           <List size={20} />
           <span className="text-xs">Transactions</span>
         </Link>

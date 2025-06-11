@@ -1,93 +1,110 @@
-import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import axios from 'axios';
 
-export default function TransactionHistory() {
-  const [transactions, setTransactions] = useState([]);
-  const [clients, setClients] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+export default function SendPaymentForm() {
+  const location = useLocation();
+  const { clientId = '', clientName = '' } = location.state || {};
+  const [toUser] = useState(clientId);
+  const [amount, setAmount] = useState('');
+  const [reason, setReason] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setError('');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-      try {
-        // Fetch clients
-        const clientsRes = await fetch('http://localhost:3000/api/client');
-        if (!clientsRes.ok) throw new Error('Failed to fetch clients');
-        const clientsData = await clientsRes.json();
+    const confirmed = window.confirm(
+      `Are you sure you want to send ₹${amount} to ${clientName} (ID: ${toUser}) for "${reason}"?`
+    );
 
-        // Create a map from userId to name
-        const clientsMap = {};
-        clientsData.forEach(client => {
-          clientsMap[client._id] = client.name;
-        });
-        setClients(clientsMap);
+    if (!confirmed) return;
 
-        // Fetch transactions
-        const transRes = await fetch('http://localhost:3000/api/transactions');
-        if (!transRes.ok) throw new Error('Failed to fetch transactions');
-        const transData = await transRes.json();
+    setLoading(true);
+    setMessage('');
 
-        setTransactions(transData);
-      } catch (err) {
-        setError(err.message);
-      }
+    try {
+      await axios.post('http://localhost:3000/api/send-to-user', {
+        toUser,
+        amount: Number(amount),
+        reason,
+      });
 
+      setMessage('Payment sent successfully!');
+      setAmount('');
+      setReason('');
+    } catch (error) {
+      console.error('Error sending payment:', error);
+      setMessage('Error sending payment.');
+    } finally {
       setLoading(false);
-    };
-
-    fetchData();
-  }, []);
-
-  const formatDate = (dateStr) => {
-    const date = new Date(dateStr);
-    return date.toLocaleString();
+    }
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-6 p-6 bg-white shadow rounded">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Transaction History</h2>
+    <div className="mx-auto mt-8 px-4 sm:px-6 md:px-8 lg:px-10">
+      <div className="max-w-sm sm:max-w-md md:max-w-lg lg:max-w-3xl mx-auto p-4 sm:p-6 md:p-8 lg:p-10 bg-gray-900 text-white shadow-lg rounded-xl border border-gray-700">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-green-400 mb-4 text-center">
+         Send Payment
+        </h2>
 
-      {loading && <p className="text-center text-gray-600">Loading transactions...</p>}
-      {error && <p className="text-center text-red-600">{error}</p>}
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4 sm:space-y-5 md:space-y-6 lg:space-y-8"
+        >
+          <div className="text-xs sm:text-sm text-gray-400 text-center">
+            Sending to <span className="text-white font-bold">{clientName}</span> 
+           
+          </div>
 
-      {!loading && !error && transactions.length === 0 && (
-        <p className="text-center text-gray-500">No transactions found.</p>
-      )}
+          <div>
+            <label className="block mb-1 text-sm sm:text-base text-gray-300 font-medium">
+              Amount (₹)
+            </label>
+            <input
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              required
+              min="1"
+              className="w-full bg-gray-800 text-white border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
+          </div>
 
-      {!loading && !error && transactions.length > 0 && (
-        <table className="w-full table-auto border-collapse border border-gray-300">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="border border-gray-300 px-4 py-2">Date</th>
-              <th className="border border-gray-300 px-4 py-2">Type</th>
-              <th className="border border-gray-300 px-4 py-2">Amount (₹)</th>
-              <th className="border border-gray-300 px-4 py-2">Reason</th>
-              <th className="border border-gray-300 px-4 py-2">To User</th>
-            </tr>
-          </thead>
-          <tbody>
-            {transactions.map(({ _id, date, type, amount, reason, toUser }) => (
-              <tr key={_id} className="text-center hover:bg-gray-50">
-                <td className="border border-gray-300 px-4 py-2">{formatDate(date)}</td>
-                <td
-                  className={`border border-gray-300 px-4 py-2 font-semibold ${
-                    type === 'send' ? 'text-red-600' : 'text-green-600'
-                  }`}
-                >
-                  {type.charAt(0).toUpperCase() + type.slice(1)}
-                </td>
-                <td className="border border-gray-300 px-4 py-2">{amount}</td>
-                <td className="border border-gray-300 px-4 py-2">{reason}</td>
-                <td className="border border-gray-300 px-4 py-2 font-medium">
-                  {clients[toUser] || toUser}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+          <div>
+            <label className="block mb-1 text-sm sm:text-base text-gray-300 font-medium">
+              Reason
+            </label>
+            <input
+              type="text"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              required
+              className="w-full bg-gray-800 text-white border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full py-2 px-4 rounded font-semibold transition-colors ${
+              loading ? 'bg-green-700 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'
+            } text-white`}
+          >
+            {loading ? 'Sending...' : 'Send Payment'}
+          </button>
+        </form>
+
+        {message && (
+          <p
+            className={`mt-4 text-center font-medium text-sm sm:text-base ${
+              message.includes('success') ? 'text-green-400' : 'text-red-400'
+            }`}
+          >
+            {message}
+          </p>
+        )}
+      </div>
     </div>
   );
 }

@@ -31,45 +31,57 @@ export default function TransactionDetails() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-6 p-6 bg-white shadow rounded text-center">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">Transaction Details</h2>
+    <div className="max-w-6xl mx-auto mt-8 p-6 bg-zinc-900 text-white rounded-lg shadow-lg">
+      <h2 className="text-3xl font-bold text-center mb-6">Transaction History</h2>
 
-      <p className="text-lg text-gray-700 mb-2">
-        <strong>Client Name:</strong> {name || 'N/A'}
-      </p>
-      <p className="text-lg text-gray-700 mb-4">
-        <strong>To User ID:</strong> {toUser || 'N/A'}
-      </p>
-
-      {loading && <p className="text-blue-500 mb-4">Loading transactions...</p>}
-      {error && <p className="text-red-500 mb-4">{error}</p>}
+      {loading && <p className="text-center text-gray-400">Loading transactions...</p>}
+      {error && <p className="text-center text-red-500">{error}</p>}
 
       {!loading && !error && transactions.length === 0 && (
-        <p className="text-gray-500 mb-4">No transactions found.</p>
+        <p className="text-center text-gray-400">No transactions found.</p>
       )}
 
       {!loading && !error && transactions.length > 0 && (
-        <div className="text-left space-y-4">
-          {transactions.map((txn) => (
-            <div
-              key={txn._id}
-              className="p-3 border rounded bg-gray-50 shadow-sm"
-            >
-              <p><strong>Amount:</strong> {txn.amount}</p>
-              <p><strong>Reason:</strong> {txn.reason}</p>
-              <p><strong>Type:</strong> {txn.type}</p>
-              <p><strong>Date:</strong> {new Date(txn.date).toLocaleString()}</p>
-            </div>
-          ))}
+        <div className="overflow-x-auto">
+          <table className="w-full table-auto border-collapse">
+            <thead>
+              <tr className="bg-zinc-800 text-gray-300">
+                <th className="px-4 py-3 border-b border-gray-700 text-left">Client Name</th>
+                <th className="px-4 py-3 border-b border-gray-700 text-left">Amount (₹)</th>
+                <th className="px-4 py-3 border-b border-gray-700 text-left">Type</th>
+                  <th className="px-4 py-3 border-b border-gray-700 text-left">Reason</th>
+                <th className="px-4 py-3 border-b border-gray-700 text-left">Date</th>
+
+             
+              </tr>
+            </thead>
+            <tbody>
+              {transactions.map(({ _id, date, type, amount, reason, toUser, clientName }) => (
+                <tr
+                  key={_id}
+                  className="hover:bg-zinc-800 transition-colors duration-200"
+                >
+                  <td className="px-4 py-3 border-b border-gray-800">{clientName}</td>
+                  <td className="px-4 py-3 border-b border-gray-800">₹ {amount}</td>
+                           <td
+                    className={`px-4 py-3 border-b border-gray-800 font-semibold ${type === 'send' ? 'text-red-400' : 'text-green-400'
+                      }`}
+                  >
+                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                  </td>
+                     <td className="px-4 py-3 border-b border-gray-800">{reason}</td>
+                  <td className="px-4 py-3 border-b border-gray-800">{formatDate(date)}</td>
+             
+               
+             
+    
+               
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
-
-      <button
-        onClick={() => navigate(-1)}
-        className="mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-      >
-        Go Back
-      </button>
     </div>
   );
 }

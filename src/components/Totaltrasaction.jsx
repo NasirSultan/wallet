@@ -1,29 +1,32 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 
 export default function TransactionHistory() {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [searchName, setSearchName] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [selectedReason, setSelectedReason] = useState('');
 
   useEffect(() => {
     const fetchTransactions = async () => {
       setLoading(true);
       setError('');
-
       try {
         const res = await fetch('http://localhost:3000/api/transactions');
         if (!res.ok) throw new Error('Failed to fetch transactions');
-
         const data = await res.json();
         setTransactions(data);
       } catch (err) {
         setError(err.message);
       }
-
       setLoading(false);
     };
-
     fetchTransactions();
   }, []);
 
@@ -32,59 +35,144 @@ export default function TransactionHistory() {
     return date.toLocaleString();
   };
 
+  const filteredTransactions = transactions.filter((txn) => {
+    const nameMatch = txn.clientName?.toLowerCase().includes(searchName.toLowerCase());
+    const txnDate = new Date(txn.date);
+    const start = startDate ? new Date(startDate) : null;
+    const end = endDate ? new Date(endDate) : null;
+    const dateMatch =
+      (!start || txnDate >= start) &&
+      (!end || txnDate <= end);
+    const validAmount = Number(txn.amount) !== 1;
+    return nameMatch && dateMatch && validAmount;
+  });
+
+  const exportPDF = () => {
+    const doc = new jsPDF();
+    doc.text('Transaction History', 14, 10);
+
+    const tableColumn = ["Client Name", "Amount (₹)", "Type", "Reason", "Date"];
+    const tableRows = filteredTransactions.map(txn => [
+      txn.clientName,
+      `₹ ${txn.amount}`,
+      txn.type.charAt(0).toUpperCase() + txn.type.slice(1),
+      txn.reason,
+      formatDate(txn.date),
+    ]);
+
+    autoTable(doc, {
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20,
+    });
+
+    doc.save("transaction_history.pdf");
+  };
+
   return (
-    <div className="max-w-4xl mx-auto mt-6 p-6 bg-white shadow rounded">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Transaction History</h2>
+    <div className="max-w-6xl mx-auto mt-8 px-4 sm:px-6 lg:px-8 py-6 bg-zinc-900 text-white rounded-lg shadow-lg">
+      <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-6">Transaction History</h2>
 
-      {loading && <p className="text-center text-gray-600">Loading transactions...</p>}
-      {error && <p className="text-center text-red-600">{error}</p>}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+        <input
+          type="text"
+          placeholder="Search by Client Name"
+          value={searchName}
+          onChange={(e) => setSearchName(e.target.value)}
+          className="w-full px-4 py-2 rounded bg-zinc-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+        />
+        <input
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+          className="w-full px-4 py-2 rounded bg-zinc-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+        />
+        <input
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+          className="w-full px-4 py-2 rounded bg-zinc-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+        />
+        <button
+          onClick={() => {
+            setSearchName('');
+            setStartDate('');
+            setEndDate('');
+          }}
+          className="w-full px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 transition font-semibold"
+        >
+          Clear Filters
+        </button>
+        <button
+          onClick={exportPDF}
+          className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition font-semibold"
+        >
+          Export PDF
+        </button>
+      </div>
 
-      {!loading && !error && transactions.length === 0 && (
-        <p className="text-center text-gray-500">No transactions found.</p>
+      {loading && <p className="text-center text-gray-400">Loading transactions...</p>}
+      {error && <p className="text-center text-red-500">{error}</p>}
+
+      {!loading && !error && filteredTransactions.length === 0 && (
+        <p className="text-center text-gray-400">No transactions found.</p>
       )}
 
-      {!loading && !error && transactions.length > 0 && (
-        <table className="w-full table-auto border-collapse border border-gray-300">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="border border-gray-300 px-4 py-2">Date</th>
-              <th className="border border-gray-300 px-4 py-2">Type</th>
-              <th className="border border-gray-300 px-4 py-2">Amount (₹)</th>
-              <th className="border border-gray-300 px-4 py-2">Reason</th>
-              <th className="border border-gray-300 px-4 py-2">To User ID</th>
-              <th className="border border-gray-300 px-4 py-2">Client Name</th>
-              <th className="border border-gray-300 px-4 py-2">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {transactions.map(({ _id, date, type, amount, reason, toUser, clientName }) => (
-              <tr key={_id} className="text-center hover:bg-gray-50">
-                <td className="border border-gray-300 px-4 py-2">{formatDate(date)}</td>
-                <td
-                  className={`border border-gray-300 px-4 py-2 font-semibold ${
-                    type === 'send' ? 'text-red-600' : 'text-green-600'
-                  }`}
-                >
-                  {type.charAt(0).toUpperCase() + type.slice(1)}
-                </td>
-                <td className="border border-gray-300 px-4 py-2">₹ {amount}</td>
-                <td className="border border-gray-300 px-4 py-2">{reason}</td>
-                <td className="border border-gray-300 px-4 py-2 font-mono">{toUser}</td>
-                <td className="border border-gray-300 px-4 py-2">{clientName}</td>
-                <td className="border border-gray-300 px-4 py-2">
-                  <Link
-                    to="/clienttransaction"
-                    state={{ name: clientName, toUser: toUser }}
-                    className="text-blue-600 underline"
-                  >
-                    View Details
-                  </Link>
-                </td>
+      {!loading && !error && filteredTransactions.length > 0 && (
+        <div className="rounded-lg border border-zinc-800 overflow-hidden">
+          <table className="w-full table-fixed border-collapse text-sm sm:text-base">
+            <thead>
+              <tr className="bg-zinc-800 text-gray-300">
+                <th className="px-4 py-3 border-b border-gray-700 text-left w-1/5"> Name</th>
+                <th className="px-4 py-3 border-b border-gray-700 text-left w-1/5">Payment</th>
+                <th className="px-4 py-3 border-b border-gray-700 text-left w-1/5">Type</th>
+                <th className="px-4 py-3 border-b border-gray-700 text-left w-1/5">Reason</th>
+                <th className="px-4 py-3 border-b border-gray-700 text-left w-1/5">Date</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredTransactions.map(({ _id, date, type, amount, reason, clientName }) => (
+                <tr key={_id} className="hover:bg-zinc-800 transition-colors duration-200">
+                  <td className="px-4 py-3 border-b border-gray-800">{clientName}</td>
+                  <td className="px-4 py-3 border-b border-gray-800">{amount}</td>
+                  <td className="px-4 py-3 border-b border-gray-800 font-semibold">
+                    {type === 'send' ? (
+                      <FaArrowUp className="text-red-400" />
+                    ) : (
+                      <FaArrowDown className="text-green-400" />
+                    )}
+                  </td>
+                  <td
+                    className="px-4 py-3 border-b border-gray-800 cursor-pointer underline text-blue-400"
+                    onClick={() => setSelectedReason(reason)}
+                  >
+                    View
+                  </td>
+                  <td className="px-4 py-3 border-b border-gray-800">{formatDate(date)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
+
+      {/* Modal for showing Reason */}
+    {selectedReason && (
+  <div
+    className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/60"
+    onClick={() => setSelectedReason('')}
+  >
+    <div
+      className="bg-zinc-900 text-white rounded-lg p-6 max-w-md w-full text-center shadow-2xl border border-white/10"
+      onClick={(e) => e.stopPropagation()} // Prevent modal click from closing
+    >
+      <h3 className="text-lg font-bold mb-4">Transaction Reason</h3>
+      <p>{selectedReason}</p>
+    </div>
+  </div>
+)}
+
+
     </div>
   );
 }

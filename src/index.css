@@ -3,3 +3,11 @@
 /* Hide scrollbar for Chrome, Safari and Opera */
 /* Hide vertical scrollbar but allow scrolling */
 
+/* index.css */
+body {
+  background-color: black;
+  margin: 0;
+  padding: 0;
+  color: white; /* Optional: makes default text readable on black background */
+  font-family: sans-serif; /* Optional: sets a clean font */
+}

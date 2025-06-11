@@ -4,9 +4,8 @@ import axios from 'axios';
 
 export default function SendPaymentForm() {
   const location = useLocation();
-  const locationToUser = location.state?.clientId || '';
-
-  const [toUser] = useState(locationToUser);  // keep hidden, don't allow editing
+  const { clientId = '', clientName = '' } = location.state || {};
+  const [toUser] = useState(clientId);
   const [amount, setAmount] = useState('');
   const [reason, setReason] = useState('');
   const [loading, setLoading] = useState(false);
@@ -16,79 +15,96 @@ export default function SendPaymentForm() {
     e.preventDefault();
 
     const confirmed = window.confirm(
-      `Are you sure you want to send ₹${amount} to user ${toUser} for "${reason}"?`
+      `Are you sure you want to send ₹${amount} to ${clientName} (ID: ${toUser}) for "${reason}"?`
     );
 
-    if (!confirmed) {
-      return; // User canceled
-    }
+    if (!confirmed) return;
 
     setLoading(true);
     setMessage('');
 
     try {
-      const response = await axios.post('http://localhost:3000/api/receive-from-user', {
+      await axios.post('http://localhost:3000/api/receive-from-user', {
         toUser,
         amount: Number(amount),
         reason,
       });
 
-      setMessage('Payment sent successfully!');
-
-      // Clear form after success
+      setMessage('Payment receive successfully!');
       setAmount('');
       setReason('');
     } catch (error) {
-      console.error('Error sending payment:', error);
-      setMessage('Error sending payment.');
+      console.error('Error Receiving payment:', error);
+      setMessage('Error Receiving payment.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-6 p-6 bg-white shadow rounded">
-      <h2 className="text-xl font-bold text-green-600 mb-4 text-center">received Payment</h2>
+    <div className="mx-auto mt-8 px-4 sm:px-6 md:px-8 lg:px-10">
+      <div className="max-w-sm sm:max-w-md md:max-w-lg lg:max-w-3xl mx-auto p-4 sm:p-6 md:p-8 lg:p-10 bg-gray-900 text-white shadow-lg rounded-xl border border-gray-700">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-green-400 mb-4 text-center">
+         Receive Payment
+        </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Hidden ToUser display */}
-        <div className="text-sm text-gray-600 mb-2 text-center">
-          Sending to User ID: <span className="font-mono">{toUser}</span>
-        </div>
-
-        <div>
-          <label className="block mb-1 font-medium">Amount</label>
-          <input
-            type="number"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            required
-            min="1"
-            className="w-full border rounded px-3 py-2"
-          />
-        </div>
-
-        <div>
-          <label className="block mb-1 font-medium">Reason</label>
-          <input
-            type="text"
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-            required
-            className="w-full border rounded px-3 py-2"
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700"
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4 sm:space-y-5 md:space-y-6 lg:space-y-8"
         >
-          {loading ? 'Sending...' : 'Send Payment'}
-        </button>
-      </form>
+          <div className="text-xs sm:text-sm text-gray-400 text-center">
+           Receiving from <span className="text-white font-bold">{clientName}</span>
 
-      {message && <p className="mt-4 text-center text-blue-600">{message}</p>}
+          </div>
+
+          <div>
+            <label className="block mb-1 text-sm sm:text-base text-gray-300 font-medium">
+              Amount (₹)
+            </label>
+            <input
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              required
+              min="1"
+              className="w-full bg-gray-800 text-white border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1 text-sm sm:text-base text-gray-300 font-medium">
+              Reason
+            </label>
+            <input
+              type="text"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              required
+              className="w-full bg-gray-800 text-white border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full py-2 px-4 rounded font-semibold transition-colors ${
+              loading ? 'bg-green-700 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'
+            } text-white`}
+          >
+            {loading ? 'Receiving...' : 'Receive Payment'}
+          </button>
+        </form>
+
+        {message && (
+          <p
+            className={`mt-4 text-center font-medium text-sm sm:text-base ${
+              message.includes('success') ? 'text-green-400' : 'text-red-400'
+            }`}
+          >
+            {message}
+          </p>
+        )}
+      </div>
     </div>
   );
 }
