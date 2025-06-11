@@ -64,7 +64,7 @@ const Navbar = () => {
         </Link>
         <Link to="/addamount" className={`flex flex-col items-center ${isActive('/addamount') ? 'text-yellow-300' : ''}`}>
           <PlusCircle size={20} />
-          <span className="text-xs">Add</span>
+          <span className="text-xs">Amount</span>
         </Link>
         <Link to="/allclients" className={`flex flex-col items-center ${isActive('/allclients') ? 'text-yellow-300' : ''}`}>
           <Users size={20} />

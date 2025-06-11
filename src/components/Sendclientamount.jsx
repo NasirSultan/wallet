@@ -15,7 +15,7 @@ export default function SendPaymentForm() {
     e.preventDefault();
 
     const confirmed = window.confirm(
-      `Are you sure you want to send ₹${amount} to ${clientName} (ID: ${toUser}) for "${reason}"?`
+      `Are you sure you want to send ${amount} to ${clientName} "?`
     );
 
     if (!confirmed) return;
