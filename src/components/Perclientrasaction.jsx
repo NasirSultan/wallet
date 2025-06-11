@@ -20,7 +20,7 @@ export default function TransactionDetails() {
   const fetchTransactions = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`http://localhost:3000/api/transactions/${toUser}`);
+      const response = await axios.get(`https://wallet-backend-chi-ten.vercel.app/api/transactions/${toUser}`);
       setTransactions(response.data);
     } catch (err) {
       console.error(err);

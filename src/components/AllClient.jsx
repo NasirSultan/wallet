@@ -15,7 +15,7 @@ export default function AllClients() {
       setError('');
 
       try {
-        const res = await fetch('http://localhost:3000/api/client');
+        const res = await fetch('https://wallet-backend-chi-ten.vercel.app/api/client');
         if (!res.ok) {
           throw new Error('Failed to fetch clients');
         }

@@ -18,7 +18,7 @@ export default function TransactionHistory() {
       setLoading(true);
       setError('');
       try {
-        const res = await fetch('http://localhost:3000/api/transactions');
+        const res = await fetch('https://wallet-backend-chi-ten.vercel.app/api/transactions');
         if (!res.ok) throw new Error('Failed to fetch transactions');
         const data = await res.json();
         setTransactions(data);

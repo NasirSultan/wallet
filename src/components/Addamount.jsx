@@ -9,7 +9,7 @@ export default function AddAmount() {
   useEffect(() => {
     async function fetchLatest() {
       try {
-        const res = await fetch('http://localhost:3000/api/latest-transaction');
+        const res = await fetch('https://wallet-backend-chi-ten.vercel.app/api/latest-transaction');
         if (!res.ok) throw new Error('Failed to fetch latest transaction');
         const data = await res.json();
         if (data && data.amount !== undefined) {

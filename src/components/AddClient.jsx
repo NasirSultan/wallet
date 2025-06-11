@@ -37,7 +37,7 @@ const handleChange = (e) => {
     setLoading(true);
 
     try {
-      const res = await fetch('http://localhost:3000/api/client', {
+      const res = await fetch('https://wallet-backend-chi-ten.vercel.app/api/client', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),

@@ -24,7 +24,7 @@ export default function SendPaymentForm() {
     setMessage('');
 
     try {
-      await axios.post('http://localhost:3000/api/send-to-user', {
+      await axios.post('https://wallet-backend-chi-ten.vercel.app/api/send-to-user', {
         toUser,
         amount: Number(amount),
         reason,
