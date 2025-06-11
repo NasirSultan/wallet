@@ -30,7 +30,7 @@ export default function AddAmount() {
     setLoading(true);
 
     try {
-      const res = await fetch('https://wallet-lyart.vercel.app/api/balance-summary', {
+      const res = await fetch('https://wallet-backend-chi-ten.vercel.app/api/balance-summary', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount: numericAmount }),
