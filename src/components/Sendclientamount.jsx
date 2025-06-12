@@ -64,6 +64,7 @@ export default function SendPaymentForm() {
             <input
               type="number"
               value={amount}
+                  placeholder="Enter amount"
               onChange={(e) => setAmount(e.target.value)}
               required
               min="1"
@@ -73,11 +74,12 @@ export default function SendPaymentForm() {
 
           <div>
             <label className="block mb-1 text-sm sm:text-base text-gray-300 font-medium">
-              Reason
+             
             </label>
             <input
               type="text"
               value={reason}
+              placeholder="Enter Reason"
               onChange={(e) => setReason(e.target.value)}
               required
               className="w-full bg-gray-800 text-white border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"

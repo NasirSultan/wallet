@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ClipboardCopy } from 'lucide-react';
 
 export default function AllClients() {
   const [clients, setClients] = useState([]);
@@ -40,6 +41,11 @@ export default function AllClients() {
   const handleReceiveAmount = (clientId, clientName) => {
     setSelectedClientName(clientName);
     navigate('/sendclientamount', { state: { clientId, clientName } });
+  };
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text);
+    alert('Copied to clipboard!');
   };
 
   return (
@@ -101,12 +107,19 @@ export default function AllClients() {
                   {/* Info */}
                   <div className="w-full sm:w-full md:w-2/3 text-center md:text-left">
                     <p className="text-3xl font-extrabold text-white">{client.name}</p>
-                    <div className="mt-4">
-                      <p className="text-xl text-gray-300">
-                        Phone - {client.phoneNumber}
-                      </p>
-                      <p className="text-xl text-gray-300 mt-2">
-                        Address - {client.address}
+                    <div className="mt-4 space-y-2">
+
+                      <div
+                        className="text-xl text-blue-400 flex flex-col sm:flex-row sm:justify-center md:justify-start items-center gap-2 cursor-pointer hover:text-blue-300 transition text-center sm:text-center md:text-left"
+                        onClick={() => copyToClipboard(client.phoneNumber)}
+                        title="Click to copy phone number"
+                      >
+                        <p>{client.phoneNumber}</p>
+                       
+                      </div>
+
+                      <p className="text-xl text-green-300">
+                        Address <span className="select-text">{client.address}</span>
                       </p>
                     </div>
                   </div>
@@ -131,7 +144,7 @@ export default function AllClients() {
                         d="M19 14l-7 7m0 0l-7-7m7 7V3"
                       />
                     </svg>
-                  
+                    View
                   </button>
 
                   <button
@@ -151,7 +164,7 @@ export default function AllClients() {
                         d="M5 10l7-7m0 0l7 7m-7-7v18"
                       />
                     </svg>
-    
+                    Receive
                   </button>
                 </div>
               </li>
@@ -162,7 +175,7 @@ export default function AllClients() {
       {/* Floating Add Client Button */}
       <button
         onClick={() => navigate('/addclient')}
-        className="fixed bottom-42 right-6 bg-green-700 hover:bg-green-800 text-white rounded-full p-4 shadow-lg transition-all duration-300 z-50"
+      className="fixed bottom-[168px] right-6 bg-green-500/30 backdrop-blur- text-white rounded-full p-4 shadow-lg border border-green-300/50 transition-all duration-300 z-50"
         aria-label="Add Client"
       >
         <svg

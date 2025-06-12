@@ -77,7 +77,7 @@ export default function AddAmount() {
         <button
           type="submit"
           disabled={loading || !amount || Number(amount) <= 0}
-          className="w-full bg-green-500 text-white py-3 sm:py-4 md:py-5 text-lg sm:text-xl md:text-2xl rounded-xl hover:bg-green-600 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-green-500 text-white py-3  md:py-3 text-lg sm:text-xl md:text-2xl rounded-xl hover:bg-green-600 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? 'Adding...' : 'Add Amount'}
         </button>
