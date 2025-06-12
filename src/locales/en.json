@@ -1,0 +1,101 @@
+{
+  "wallet.heading": "My Wallet",
+  "wallet.balance": "Balance",
+  "wallet.received": "Received",
+  "wallet.sent": "Sent",
+  "wallet.totalAdded": "Total Added Amount",
+  "wallet.loading": "Loading...",
+   "addAmount": {
+    "title": "Add Amount",
+    "placeholder": "Enter amount",
+     "button": "Submit",
+    "loading": "Adding...",
+    "invalid": "Please enter a valid amount greater than 0",
+    "confirm": "Are you sure you want to add ₹{{amount}}?",
+    "success": "Successfully added!",
+    "failed": "Failed to add amount",
+    "error": "Server or network error",
+    "latestAdded": "Latest added amount: ₹{{amount}}"
+  },
+"add_client": "Add Client",
+  "client_name": "Client Name",
+ 
+  "add": "Add",
+  "adding": "Adding...",
+  "fill_all_fields": "Please fill all fields.",
+  "server_error": "Something went wrong. Try again.",
+  "added_success": "Client added successfully!",
+  "all_clients": "All Clients",
+  "search_clients": "Search clients...",
+  "loading": "Loading clients...",
+  "no_clients": "No clients found.",
+  "copied": "Copied to clipboard!",
+  "copy_phone": "Click to copy phone number",
+  "address": "Address",
+  "view": "View",
+  "receive": "Receive",
+  "fetch_error": "Failed to fetch clients",
+   "navbar": {
+    "title": "My App",
+    "home": "Home",
+    "addAmount": "Add Amount",
+    "amount": "Amount",
+    "clients": "Clients",
+    "transactions": "Transactions",
+    "contact": "Contact",
+    "back": "Go Back"
+  },
+  
+  "receivedamount": {
+    "title": "Receive Payment",
+    "receivingFrom": "Receiving from",
+    "enterAmount": "Enter amount",
+    "enterReason": "Enter reason",
+    "receivePayment": "Receive Payment",
+    "receiving": "Receiving...",
+    "confirmMessage": "Are you sure you want to receive {{amount}} from {{clientName}}?",
+    "success": "Payment received successfully!",
+    "error": "Error receiving payment."
+  },
+ 
+
+  
+      "title": "Transaction History",
+  "searchPlaceholder": "Search by Client Name",
+  "startDate": "Start Date",
+  "endDate": "End Date",
+  "clearFilters": "Clear Filters",
+  "exportPDF": "Export PDF",
+  "loading": "Loading transactions...",
+
+  "noTransactions": "No transactions found.",
+  "name": "Name",
+  "payment": "Payment",
+  "type": "Type",
+
+  "date": "Date",
+  "transactionReason": "Transaction Reason"
+
+
+
+
+,
+
+  "sendamount": {
+    "title": "Send Payment",
+    "sendingTo": "Sending to",
+    "enterAmount": "Enter amount",
+    "enterReason": "Enter reason",
+    "sendPayment": "Send Payment",
+    "sending": "Sending...",
+    "confirmMessage": "Are you sure you want to send {{amount}} to {{clientName}}?",
+    "success": "Payment sent successfully!",
+    "error": "Error sending payment."
+  }
+
+
+
+
+
+}
+

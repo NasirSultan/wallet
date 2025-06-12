@@ -8,6 +8,7 @@ import Sendclientamount from './components/Sendclientamount';
 import Receivedclientamount from './components/Receivedclientamount';
 import Totaltrasaction from './components/Totaltrasaction';
 import Perclientrasaction from './components/Perclientrasaction';
+import LanguageSwitcher from './components/LanguageSwitcher';
 
 function Contact() {
   return <h2>Contact Page</h2>;
@@ -28,6 +29,7 @@ function App() {
           <Route path="/receivedclientamount" element={<Receivedclientamount />} />
           <Route path="/totaltransactions" element={<Totaltrasaction />} />
           <Route path="/clienttransaction" element={<Perclientrasaction />} />
+          <Route path="/languageswitcher" element={<LanguageSwitcher />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>
       </div>

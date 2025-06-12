@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
 export default function TransactionHistory() {
+  const { t, i18n } = useTranslation();
+
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -32,7 +34,7 @@ export default function TransactionHistory() {
 
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
-    return date.toLocaleString();
+    return date.toLocaleString(i18n.language === 'ur' ? 'ur-PK' : 'en-US');
   };
 
   const filteredTransactions = transactions.filter((txn) => {
@@ -49,9 +51,16 @@ export default function TransactionHistory() {
 
   const exportPDF = () => {
     const doc = new jsPDF();
-    doc.text('Transaction History', 14, 10);
+    doc.text(t('title'), 14, 10);
 
-    const tableColumn = ["Client Name", "Amount (₹)", "Type", "Reason", "Date"];
+    const tableColumn = [
+      t("name"),
+      t("payment"),
+      t("type"),
+      t("reason"),
+      t("date")
+    ];
+
     const tableRows = filteredTransactions.map(txn => [
       txn.clientName,
       `₹ ${txn.amount}`,
@@ -71,34 +80,34 @@ export default function TransactionHistory() {
 
   return (
     <div className="max-w-6xl mx-auto mt-8 px-4 sm:px-6 lg:px-8 py-6 bg-zinc-900 text-white rounded-lg shadow-lg">
-      <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-6">Transaction History</h2>
+      {/* Language Switcher */}
+     
+      <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-6">{t('title')}</h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
         <input
           type="text"
-          placeholder="Search by Client Name"
+          placeholder={t('searchPlaceholder')}
           value={searchName}
           onChange={(e) => setSearchName(e.target.value)}
           className="w-full px-4 py-2 rounded bg-zinc-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
         />
-    <input
-  type="date"
-  value={startDate}
-  onChange={(e) => setStartDate(e.target.value)}
-  className={`w-full sm:w-full px-4 py-2 rounded bg-zinc-800 ${
-    !startDate ? 'text-gray-400' : 'text-white'
-  } border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-500`}
-/>
-
-<input
-  type="date"
-  value={endDate}
-  onChange={(e) => setEndDate(e.target.value)}
-  className={`w-full sm:w-full px-4 py-2 rounded bg-zinc-800 ${
-    !endDate ? 'text-gray-400' : 'text-white'
-  } border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-500`}
-/>
-
+        <input
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+          className={`w-full px-4 py-2 rounded bg-zinc-800 ${
+            !startDate ? 'text-gray-400' : 'text-white'
+          } border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-500`}
+        />
+        <input
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+          className={`w-full px-4 py-2 rounded bg-zinc-800 ${
+            !endDate ? 'text-gray-400' : 'text-white'
+          } border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-500`}
+        />
         <button
           onClick={() => {
             setSearchName('');
@@ -107,21 +116,21 @@ export default function TransactionHistory() {
           }}
           className="w-full px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 transition font-semibold"
         >
-          Clear Filters
+          {t('clearFilters')}
         </button>
         <button
           onClick={exportPDF}
           className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition font-semibold"
         >
-          Export PDF
+          {t('exportPDF')}
         </button>
       </div>
 
-      {loading && <p className="text-center text-gray-400">Loading transactions...</p>}
-      {error && <p className="text-center text-red-500">{error}</p>}
+      {loading && <p className="text-center text-gray-400">{t('loading')}</p>}
+      {error && <p className="text-center text-red-500">{t('error')}</p>}
 
       {!loading && !error && filteredTransactions.length === 0 && (
-        <p className="text-center text-gray-400">No transactions found.</p>
+        <p className="text-center text-gray-400">{t('noTransactions')}</p>
       )}
 
       {!loading && !error && filteredTransactions.length > 0 && (
@@ -129,11 +138,11 @@ export default function TransactionHistory() {
           <table className="w-full table-fixed border-collapse text-sm sm:text-base">
             <thead>
               <tr className="bg-zinc-800 text-gray-300">
-                <th className="px-4 py-3 border-b border-gray-700 text-left w-1/5"> Name</th>
-                <th className="px-4 py-3 border-b border-gray-700 text-left w-1/5">Payment</th>
-                <th className="px-4 py-3 border-b border-gray-700 text-left w-1/5">Type</th>
-                <th className="px-4 py-3 border-b border-gray-700 text-left w-1/5">Reason</th>
-                <th className="px-4 py-3 border-b border-gray-700 text-left w-1/5">Date</th>
+                <th className="px-4 py-3 border-b border-gray-700 text-left w-1/5">{t('name')}</th>
+                <th className="px-4 py-3 border-b border-gray-700 text-left w-1/5">{t('payment')}</th>
+                <th className="px-4 py-3 border-b border-gray-700 text-left w-1/5">{t('type')}</th>
+                <th className="px-4 py-3 border-b border-gray-700 text-left w-1/5">{t('reason')}</th>
+                <th className="px-4 py-3 border-b border-gray-700 text-left w-1/5">{t('date')}</th>
               </tr>
             </thead>
             <tbody>
@@ -152,7 +161,7 @@ export default function TransactionHistory() {
                     className="px-4 py-3 border-b border-gray-800 cursor-pointer underline text-blue-400"
                     onClick={() => setSelectedReason(reason)}
                   >
-                    View
+                    {t('reason')}
                   </td>
                   <td className="px-4 py-3 border-b border-gray-800">{formatDate(date)}</td>
                 </tr>
@@ -163,22 +172,20 @@ export default function TransactionHistory() {
       )}
 
       {/* Modal for showing Reason */}
-    {selectedReason && (
-  <div
-    className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/60"
-    onClick={() => setSelectedReason('')}
-  >
-    <div
-      className="bg-zinc-900 text-white rounded-lg p-6 max-w-md w-full text-center shadow-2xl border border-white/10"
-      onClick={(e) => e.stopPropagation()} // Prevent modal click from closing
-    >
-      <h3 className="text-lg font-bold mb-4">Transaction Reason</h3>
-      <p>{selectedReason}</p>
-    </div>
-  </div>
-)}
-
-
+      {selectedReason && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/60"
+          onClick={() => setSelectedReason('')}
+        >
+          <div
+            className="bg-zinc-900 text-white rounded-lg p-6 max-w-md w-full text-center shadow-2xl border border-white/10"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-lg font-bold mb-4">{t('transactionReason')}</h3>
+            <p>{selectedReason}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

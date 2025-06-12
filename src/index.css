@@ -11,3 +11,39 @@ body {
   color: white; /* Optional: makes default text readable on black background */
   font-family: sans-serif; /* Optional: sets a clean font */
 }
+/* Always keep layout LTR */
+/* Common styles for auto-dir */
+.auto-dir {
+  font-family: sans-serif;
+}
+
+/* Urdu Language Setup */
+body.lang-ur .auto-dir {
+  direction: rtl;
+  font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', serif;
+  text-align: right; /* Default for RTL */
+}
+
+/* English Language Setup */
+body.lang-en .auto-dir {
+  direction: ltr;
+  font-family: sans-serif;
+  text-align: left; /* Default for LTR */
+}
+
+/* Preserve center alignment for both languages */
+.auto-dir.text-center {
+  text-align: center !important;
+}
+
+/* Manually override left/right classes based on language */
+
+/* If user forces text-left in Urdu, convert to right */
+body.lang-ur .auto-dir.text-left {
+  text-align: right !important;
+}
+
+/* If user forces text-right in English, convert to left */
+body.lang-en .auto-dir.text-right {
+  text-align: left !important;
+}
