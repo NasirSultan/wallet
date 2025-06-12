@@ -5,10 +5,10 @@
   "wallet.sent": "Sent",
   "wallet.totalAdded": "Total Added Amount",
   "wallet.loading": "Loading...",
-   "addAmount": {
+  "addAmount": {
     "title": "Add Amount",
     "placeholder": "Enter amount",
-     "button": "Submit",
+    "button": "Submit",
     "loading": "Adding...",
     "invalid": "Please enter a valid amount greater than 0",
     "confirm": "Are you sure you want to add ₹{{amount}}?",
@@ -17,9 +17,8 @@
     "error": "Server or network error",
     "latestAdded": "Latest added amount: ₹{{amount}}"
   },
-"add_client": "Add Client",
+  "add_client": "Add Client",
   "client_name": "Client Name",
- 
   "add": "Add",
   "adding": "Adding...",
   "fill_all_fields": "Please fill all fields.",
@@ -35,7 +34,7 @@
   "view": "View",
   "receive": "Receive",
   "fetch_error": "Failed to fetch clients",
-   "navbar": {
+  "navbar": {
     "title": "My App",
     "home": "Home",
     "addAmount": "Add Amount",
@@ -45,7 +44,6 @@
     "contact": "Contact",
     "back": "Go Back"
   },
-  
   "receivedamount": {
     "title": "Receive Payment",
     "receivingFrom": "Receiving from",
@@ -57,30 +55,19 @@
     "success": "Payment received successfully!",
     "error": "Error receiving payment."
   },
- 
-
-  
-      "title": "Transaction History",
+  "title": "Transaction History",
   "searchPlaceholder": "Search by Client Name",
   "startDate": "Start Date",
   "endDate": "End Date",
   "clearFilters": "Clear Filters",
   "exportPDF": "Export PDF",
   "loading": "Loading transactions...",
-
   "noTransactions": "No transactions found.",
   "name": "Name",
   "payment": "Payment",
   "type": "Type",
-
   "date": "Date",
-  "transactionReason": "Transaction Reason"
-
-
-
-
-,
-
+  "transactionReason": "Transaction Reason",
   "sendamount": {
     "title": "Send Payment",
     "sendingTo": "Sending to",
@@ -92,10 +79,4 @@
     "success": "Payment sent successfully!",
     "error": "Error sending payment."
   }
-
-
-
-
-
 }
-
