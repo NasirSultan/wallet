@@ -150,9 +150,7 @@ export default function SendPaymentForm() {
       onClick={(e) => e.stopPropagation()}
     >
       {/* Title */}
-      <h3 className="text-center text-blue-400 text-lg sm:text-xl font-bold mb-4">
-        {t('Simple Calculator') || 'Simple Calculator'}
-      </h3>
+    
 
       {/* Single Row Layout */}
       <div className="flex flex-wrap gap-2 justify-center items-center text-sm sm:text-base">
