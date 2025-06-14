@@ -3,6 +3,9 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
+import { Calculator } from 'lucide-react';
+
+
 
 export default function SendPaymentForm() {
   const { t } = useTranslation();
@@ -126,14 +129,14 @@ export default function SendPaymentForm() {
         )}
       </div>
 
-      {/* Floating Calculator Button */}
-     <button
+<button
   onClick={() => setShowCalculator(true)}
-  className="fixed bottom-40 right-6 bg-green-600 hover:bg-green-700 text-white w-14 h-14 rounded-full flex items-center justify-center text-xl shadow-lg z-50"
-  title={t('calculator') || 'Calculator'}
+  className="fixed bottom-[168px] right-6 bg-green-500/30 backdrop-blur text-white rounded-full p-4 shadow-lg border border-green-300/50 z-50"
 >
-  +
+  <Calculator size={18} />
+
 </button>
+
 
 
       {/* Calculator Modal */}
