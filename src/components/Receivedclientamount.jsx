@@ -2,7 +2,8 @@ import { useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
-import i18n from '../i18n'; // ✅ Ensure i18n is properly imported
+import i18n from '../i18n';
+
 export default function SendPaymentForm() {
   const { t } = useTranslation();
   const location = useLocation();
@@ -13,9 +14,16 @@ export default function SendPaymentForm() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const isUrdu = i18n.language === 'ur';
+
+  // Calculator States
+  const [showCalculator, setShowCalculator] = useState(false);
+  const [num1, setNum1] = useState('');
+  const [num2, setNum2] = useState('');
+  const [operator, setOperator] = useState('+');
+  const [calcResult, setCalcResult] = useState(null);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const confirmed = window.confirm(
       t('receivedamount.confirmMessage', { amount, clientName })
     );
@@ -42,6 +50,21 @@ export default function SendPaymentForm() {
     }
   };
 
+  const calculate = () => {
+    const a = parseFloat(num1);
+    const b = parseFloat(num2);
+    let res = 0;
+    switch (operator) {
+      case '+': res = a + b; break;
+      case '-': res = a - b; break;
+      case '*': res = a * b; break;
+      case '/': res = b !== 0 ? a / b : '∞'; break;
+      default: res = 0;
+    }
+    setCalcResult(res);
+    setAmount(res.toString()); // Optional: auto-fill the amount field
+  };
+
   return (
     <div className="mx-auto mt-8 px-4 sm:px-6 md:px-8 lg:px-10">
       <div className="max-w-sm sm:max-w-md md:max-w-lg lg:max-w-3xl mx-auto p-4 sm:p-6 md:p-8 lg:p-10 bg-gray-900 text-white shadow-lg rounded-xl border border-gray-700">
@@ -62,9 +85,9 @@ export default function SendPaymentForm() {
               onChange={(e) => setAmount(e.target.value)}
               required
               min="1"
-              className={`w-full bg-gray-800 text-white border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500
-                  ${isUrdu ? 'text-right' : 'text-left'}
-              `}
+              className={`w-full bg-gray-800 text-white border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${
+                isUrdu ? 'text-right' : 'text-left'
+              }`}
             />
           </div>
 
@@ -75,9 +98,9 @@ export default function SendPaymentForm() {
               placeholder={t('receivedamount.enterReason')}
               onChange={(e) => setReason(e.target.value)}
               required
-              className={`w-full bg-gray-800 text-white border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500
-                  ${isUrdu ? 'text-right' : 'text-left'}
-              `}
+              className={`w-full bg-gray-800 text-white border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${
+                isUrdu ? 'text-right' : 'text-left'
+              }`}
             />
           </div>
 
@@ -102,6 +125,98 @@ export default function SendPaymentForm() {
           </p>
         )}
       </div>
+
+      {/* Floating Calculator Button */}
+     <button
+  onClick={() => setShowCalculator(true)}
+  className="fixed bottom-40 right-6 bg-green-600 hover:bg-green-700 text-white w-14 h-14 rounded-full flex items-center justify-center text-xl shadow-lg z-50"
+  title={t('calculator') || 'Calculator'}
+>
+  +
+</button>
+
+
+      {/* Calculator Modal */}
+{showCalculator && (
+  <div
+    className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
+    onClick={() => setShowCalculator(false)}
+  >
+    <div
+      className="bg-black text-white rounded-xl shadow-2xl p-4 w-[95%] max-w-4xl"
+      onClick={(e) => e.stopPropagation()}
+    >
+      {/* Title */}
+      <h3 className="text-center text-blue-400 text-lg sm:text-xl font-bold mb-4">
+        {t('Simple Calculator') || 'Simple Calculator'}
+      </h3>
+
+      {/* Single Row Layout */}
+      <div className="flex flex-wrap gap-2 justify-center items-center text-sm sm:text-base">
+        <input
+          type="number"
+          value={num1}
+          onChange={(e) => setNum1(e.target.value)}
+          placeholder={t('1st Amount') || 'First'}
+          className="px-3 py-2 rounded bg-zinc-800 text-white placeholder-gray-400 w-28 sm:w-32"
+        />
+
+        <select
+          value={operator}
+          onChange={(e) => setOperator(e.target.value)}
+          className="px-3 py-2 rounded bg-zinc-800 text-white text-center w-12 sm:w-14"
+        >
+          <option value="+">+</option>
+          <option value="-">−</option>
+          <option value="*">×</option>
+          <option value="/">÷</option>
+        </select>
+
+        <input
+          type="number"
+          value={num2}
+          onChange={(e) => setNum2(e.target.value)}
+          placeholder={t('2nd Amount') || 'Second'}
+          className="px-3 py-2 rounded bg-zinc-800 text-white placeholder-gray-400 w-28 sm:w-32"
+        />
+
+     <div className="w-[95%]  flex flex-row gap-2 mt-4 mx-4">
+  <button
+    onClick={calculate}
+    className="w-full px-4 py-2 rounded bg-green-600 hover:bg-green-700 text-white font-medium"
+  >
+    {t('Calculate') || 'Calculate'}
+  </button>
+
+  <button
+    onClick={() => {
+      setNum1('');
+      setNum2('');
+      setCalcResult(null);
+    }}
+    className="w-full px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-white font-medium"
+  >
+    {t('Clear') || 'Clear'}
+  </button>
+</div>
+
+      </div>
+
+      {/* Output Result */}
+      {calcResult !== null && (
+        <div
+          onClick={() => setNum1(calcResult.toString())}
+          className="mt-4 mx-4 text-center bg-green-900 text-green-200 px-4 py-1 rounded cursor-pointer hover:bg-green-800 transition font-semibold"
+          title="Click to set result as first input"
+        >
+          {t('Result') || 'Result'}: {calcResult}
+        </div>
+      )}
+    </div>
+  </div>
+)}
+
+
     </div>
   );
 }
